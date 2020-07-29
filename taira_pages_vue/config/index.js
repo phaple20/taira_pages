@@ -1,4 +1,3 @@
-//用于配置 `dev` 模式和 `prod` 模式的 webpack config 文件
 "use strict";
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
@@ -43,6 +42,13 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, "../docs"),
     assetsSubDirectory: "static",
     assetsPublicPath: "./",
+
+    // index: path.resolve(__dirname, "../docs/index.html"),
+
+    // // Paths
+    // assetsRoot: path.resolve(__dirname, "../docs"),
+    // assetsSubDirectory: "static",
+    // assetsPublicPath: "./",
 
     /**
      * Source Maps
