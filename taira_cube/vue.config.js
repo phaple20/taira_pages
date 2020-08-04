@@ -7,11 +7,18 @@ module.exports = {
   outputDir: "./dist",
   assetsDir: "./assets",
   runtimeCompiler: true,
+  /* 是否在构建生产包时生成 sourceMap 文件，false将提高构建速度 */
   productionSourceMap: false,
   parallel: undefined,
   lintOnSave: false,
   filenameHashing: false,
-
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `@import "@/assets/scss/_variable.scss";`
+      }
+    }
+  },
   pages: {
     // page 的入口
     index: {
@@ -22,7 +29,7 @@ module.exports = {
       filename: "index.html",
       // 当使用 title 选项时，
       // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
-      title: "IndexPage",
+      title: "首页",
       // 在这个页面中包含的块，默认情况下会包含
       // 提取出来的通用 chunk 和 vendor chunk。
       chunks: ["chunk-vendors", "chunk-common", "index"]

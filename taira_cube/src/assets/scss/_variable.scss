@@ -1,0 +1,15 @@
+$theme-color: #33aef0;
+$bg_color: #ddd;
+
+@mixin link_colors($color, $hover, $visited) {
+  color: $color;
+  &:hover {
+    color: $hover;
+  }
+  &:visited {
+    color: $visited;
+  }
+}
+a {
+  @include link_colors(#bf0000, #d10000, grey);
+}

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "../App.vue";
 import router from "./router";
-//import store from '../../store'
+import store from "../../store";
 
 /* 全局公共方法封装 */
 //import public_methods from "../../assets/js/Public-Methods";
@@ -12,6 +12,6 @@ import router from "./router";
 
 new Vue({
   router,
-  //store,
+  store,
   render: h => h(App)
 }).$mount("#app");
