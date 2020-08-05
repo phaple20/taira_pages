@@ -39,15 +39,29 @@
       >content</van-popup
     >
     {{ testvuex }}
+    <van-row>
+      <van-col span="8">{{ countDouble }}</van-col>
+      <van-col span="8"
+        ><van-button plain type="primary" @click="addcount">add</van-button>
+      </van-col>
+      <van-col span="8"
+        ><van-button plain type="primary" @click="loading">load</van-button>
+      </van-col>
+    </van-row>
   </div>
 </template>
 <script>
-import { Cell, CellGroup, Button, Icon, Popup } from "vant";
+import { Col, Row, Cell, CellGroup, Button, Icon, Popup, Toast } from "vant";
+import { mapGetters } from "vuex";
 export default {
   computed: {
+    ...mapGetters(["countDouble"]),
     testvuex() {
       return this.$store.state.name;
     }
+    // countDouble() {
+    //   return this.$store.state.countDouble;
+    // }
   },
   data() {
     return {
@@ -55,15 +69,29 @@ export default {
     };
   },
   components: {
+    [Col.name]: Col,
+    [Row.name]: Row,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Button.name]: Button,
     [Icon.name]: Icon,
-    [Popup.name]: Popup
+    [Popup.name]: Popup,
+    [Toast.name]: Toast
   },
   methods: {
     showPopup() {
       this.show = true;
+    },
+    addcount() {
+      this.$store.dispatch("Increment", {
+        n: 10
+      });
+    },
+    loading() {
+      Toast.loading({
+        message: "加载中..."
+        //forbidClick: true
+      });
     }
   }
 };
