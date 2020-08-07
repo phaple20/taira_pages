@@ -1,32 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-Vue.use(Vuex);
+import module_a from "./module/module_a";
+import module_sh from "./module/module_weather_shanghai";
 
-const module_a = {
-  state: {
-    name: "vuex-state",
-    count: 12
-  },
-  mutations: {
-    increment(state, cn) {
-      state.count += cn.n;
-    }
-  },
-  actions: {
-    Increment({ commit }, num) {
-      commit("increment", num);
-    }
-  },
-  getters: {
-    countDouble: function(state) {
-      return state.count * 2;
-    }
-  }
-};
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    a: module_a
+    a: module_a,
+    sh: module_sh
   }
 });

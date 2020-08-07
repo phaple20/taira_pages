@@ -1,19 +1,9 @@
 <template>
-  <div>
-    <!-- <button v-on:click="show = !show">Toggle</button>
-    <transition name="harvey-fade">
-      <p v-if="show">testtoggle</p>
-    </transition> -->
-    <ul>
-      <li>
-        <a href="">{{ $store.state.name }}</a>
-      </li>
-      <li><a href="">bf</a></li>
-    </ul>
-    <div class="andA">
-      <ul>
-        <li><a href="">cf</a></li>
-      </ul>
+  <section>
+    <van-dropdown-menu active-color="#ff0000">
+      <van-dropdown-item v-model="value1" :options="this.$store.state.sh.city_sh" />
+      <van-dropdown-item v-model="value2" :options="option2" />
+    </van-dropdown-menu>
     </div>
     <a href="baidu.com">df</a>
     <van-button plain type="primary">朴素按钮</van-button>
@@ -48,27 +38,45 @@
         ><van-button plain type="primary" @click="loading">load</van-button>
       </van-col>
     </van-row>
-  </div>
+  </section>
 </template>
 <script>
-import { Col, Row, Cell, CellGroup, Button, Icon, Popup, Toast } from "vant";
+import {
+  DropdownMenu,
+  DropdownItem,
+  Col,
+  Row,
+  Cell,
+  CellGroup,
+  Button,
+  Icon,
+  Popup,
+  Toast
+} from "vant";
 import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["countDouble"]),
+    ...mapGetters(["countDouble","sh_area"]),
     testvuex() {
       return this.$store.state.name;
-    }
-    // countDouble() {
-    //   return this.$store.state.countDouble;
-    // }
+    },
   },
   data() {
     return {
-      show: false
+      show: false,
+      value1: 0,
+      value2: "a",
+      option1: this.$store.state.sh.city_sh,
+      option2: [
+        { text: "默认排序", value: "a" },
+        { text: "好评排序", value: "b" },
+        { text: "销量排序", value: "c" }
+      ]
     };
   },
   components: {
+    [DropdownMenu.name]: DropdownMenu,
+    [DropdownItem.name]: DropdownItem,
     [Col.name]: Col,
     [Row.name]: Row,
     [Cell.name]: Cell,
@@ -77,6 +85,11 @@ export default {
     [Icon.name]: Icon,
     [Popup.name]: Popup,
     [Toast.name]: Toast
+  },
+  created() {
+    this.$store.dispatch('Sh_area_get').then(() => {
+      console.log('suc')
+    });
   },
   methods: {
     showPopup() {
@@ -93,7 +106,13 @@ export default {
         //forbidClick: true
       });
     }
-  }
+  },
+  mounted() {
+    //this.option1 = this.$store.state.sh.city_sh
+  },
+  watch: {
+    
+  },
 };
 </script>
 <style lang="scss" scoped>
