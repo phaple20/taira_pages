@@ -1,6 +1,6 @@
 <template>
   <section>
-    <van-skeleton :row="3" :loading="loading">
+    <van-skeleton :row="3" :loading="this.$store.state.sh.loading">
       <van-dropdown-menu active-color="#ff0000">
         <van-dropdown-item
           v-model="value1"
@@ -94,7 +94,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       show: false,
       value1: 0,
       value2: "a",
@@ -123,10 +123,7 @@ export default {
     [Toast.name]: Toast
   },
   created() {
-    this.$store.dispatch("Sh_area_get").then(() => {
-      console.log("finish");
-      this.loading = false;
-    });
+    this.$store.dispatch("Sh_area_get");
   },
   methods: {
     showPopup() {

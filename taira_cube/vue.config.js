@@ -1,7 +1,7 @@
 module.exports = {
   pwa: {
     name: "",
-    themeColor: "#D0021B",
+    themeColor: "#D0021B"
   },
   publicPath: "./",
   outputDir: "./dist",
@@ -15,9 +15,9 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        data: `@import "@/assets/scss/_variable.scss";`,
-      },
-    },
+        data: `@import "@/assets/scss/_variable.scss";`
+      }
+    }
   },
   pages: {
     // page 的入口
@@ -32,19 +32,20 @@ module.exports = {
       title: "首页",
       // 在这个页面中包含的块，默认情况下会包含
       // 提取出来的通用 chunk 和 vendor chunk。
-      chunks: ["chunk-vendors", "chunk-common", "index"],
+      chunks: ["chunk-vendors", "chunk-common", "index"]
       // 当使用只有入口的字符串格式时，
       // 模板会被推导为 `public/subpage.html`
       // 并且如果找不到的话，就回退到 `public/index.html`。
       // 输出文件名会被推导为 `subpage.html`。
       // subpage: 'src/subpage/userRecharge_index.js'
-    },
+    }
   },
   devServer: {
     open: process.platform === "vue",
-    host: "192.168.0.105",
+    //host: "192.168.0.105",
+    host: "localhost",
     port: 8080,
     https: false,
-    hotOnly: false,
-  },
+    hotOnly: false
+  }
 };
