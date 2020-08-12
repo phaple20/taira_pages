@@ -1,69 +1,142 @@
 <template>
   <section>
-    <van-skeleton :row="3" :loading="this.$store.state.sh.loading">
-      <van-dropdown-menu active-color="#ff0000">
-        <van-dropdown-item
-          v-model="value1"
-          :options="this.$store.state.sh.city_sh"
-        />
-        <van-dropdown-item v-model="value2" :options="option2" />
-      </van-dropdown-menu>
-      <a href="baidu.com">df</a>
-      <van-button plain type="primary">朴素按钮</van-button>
-      <van-icon name="chat-o" badge="99+" />
-      <van-cell-group title="分组1">
-        <van-cell title="cell" icon="shop-o">
-          <!-- 使用 right-icon 插槽来自定义右侧图标 -->
-          <template #right-icon>
-            <van-icon name="search" class="search=icon" />
-          </template>
-        </van-cell>
-        <!--arrow-direction="down"-->
-        <van-cell title="popup" is-link value="内容" @click="showPopup" />
+    <!--
+    <van-skeleton
+      title
+      avatar
+      :row="10"
+      :loading="this.$store.state.sh.loading"
+    >-->
+    <van-dropdown-menu active-color="#ff0000">
+      <van-dropdown-item
+        v-model="city_list_no"
+        :options="this.$store.state.sh.city_sh"
+        @change="city_area_change"
+      />
+      <van-dropdown-item
+        v-model="city_time"
+        :options="city_time_list"
+        @change="city_time_change"
+      />
+    </van-dropdown-menu>
+    <van-popup
+      v-model="show"
+      position="left"
+      :style="{ width: '50%', height: '100%' }"
+      get-container="body"
+      closeable
+      round
+      :duration="0.3"
+      >content</van-popup
+    >
+    <!--城市列表 信息-->
+    <van-row v-if="sh_today" v-show="city_nav_no == 0">
+      <van-divider content-position="left">基本信息</van-divider>
+      <van-cell-group>
+        <van-cell title="cityid" :value="sh_today.cityid"></van-cell>
+        <van-cell title="weaid" :value="sh_today.weaid"></van-cell>
+        <van-cell title="城区" :value="sh_today.area_2"></van-cell>
       </van-cell-group>
-      <van-popup
-        v-model="show"
-        position="left"
-        :style="{ width: '50%', height: '100%' }"
-        get-container="body"
-        closeable
-        round
-        :duration="0.3"
-        >content</van-popup
+      <van-divider content-position="left">今日天气</van-divider>
+      <van-cell-group>
+        <van-cell
+          title="可见蓝天"
+          v-if="sh_today.today.wtBlueSkyId == 2"
+          value="不可"
+        ></van-cell>
+        <van-cell
+          title="可见蓝天"
+          v-else-if="sh_today.today.wtBlueSkyId == 1"
+          value="可"
+        ></van-cell>
+        <van-cell
+          title="白天"
+          :value="sh_today.today.wtNm1"
+          :label="`${sh_today.today.wtTemp1}℃`"
+        ></van-cell>
+        <van-cell
+          title="夜间"
+          :value="sh_today.today.wtNm2"
+          :label="`${sh_today.today.wtTemp2}℃`"
+        ></van-cell>
+        <van-cell title="日出时间" :value="sh_today.today.wtSunr"></van-cell>
+        <van-cell title="日落时间" :value="sh_today.today.wtSuns"></van-cell>
+        <van-cell
+          title="风力(白天)"
+          :value="sh_today.today.wtWinpNm1"
+        ></van-cell>
+        <van-cell
+          title="风力(夜间)"
+          :value="sh_today.today.wtWinpNm2"
+        ></van-cell>
+      </van-cell-group>
+      <van-divider content-position="left">实时天气</van-divider>
+      <van-cell-group>
+        <van-cell title="week" :value="sh_today.realTime.week"></van-cell>
+        <van-cell title="天气类型" :value="sh_today.realTime.wtNm"></van-cell>
+        <van-cell title="温度℃" :value="sh_today.realTime.wtTemp"></van-cell>
+        <van-cell title="湿度%" :value="sh_today.realTime.wtHumi"></van-cell>
+        <van-cell title="风向" :value="sh_today.realTime.wtWindNm"></van-cell>
+        <van-cell title="风力 级" :value="sh_today.realTime.wtWinp"></van-cell>
+        <van-cell
+          title="风速 km/h"
+          :value="sh_today.realTime.wtWins"
+        ></van-cell>
+        <van-cell title="pm2.5 aqi" :value="sh_today.realTime.wtAqi"></van-cell>
+        <van-cell
+          title="能见度km"
+          :value="sh_today.realTime.wtVisibility"
+        ></van-cell>
+        <van-cell
+          title="降雨量mm"
+          :value="sh_today.realTime.wtRainfall"
+        ></van-cell>
+        <van-cell
+          title="气压hpa"
+          :value="sh_today.realTime.wtPressurel"
+        ></van-cell>
+      </van-cell-group>
+    </van-row>
+    <!--城市逐小时-->
+    <van-row v-if="sh_today_day" v-show="city_nav_no == 1">
+      <van-divider>{{ sh_today_day.area_2 }}</van-divider>
+      <van-cell-group
+        v-for="(item, index) in sh_today_day.futureHour"
+        :key="index"
       >
-      {{ testvuex }}
-      <van-row>
-        <van-col span="8">{{ countDouble }}</van-col>
-        <van-col span="8"
-          ><van-button plain type="primary" @click="addcount">add</van-button>
-        </van-col>
-        <van-col span="8"
-          ><van-button plain type="primary" @click="loadbtn">load</van-button>
-        </van-col>
-      </van-row>
-      <van-grid :border="false" :column-num="3">
-        <van-grid-item>
-          <div @touchstart="gotouchstart" @touchend="gotouchend">
-            <van-image src="https://img.yzcdn.cn/vant/apple-1.jpg" />
-          </div>
-        </van-grid-item>
-        <van-grid-item>
-          <van-image src="https://img.yzcdn.cn/vant/apple-2.jpg" />
-        </van-grid-item>
-        <van-grid-item>
-          <van-image src="https://img.yzcdn.cn/vant/apple-3.jpg" />
-        </van-grid-item>
-      </van-grid>
-      <van-grid>
-        <van-grid-item
-          v-for="value in 6"
-          :key="value"
-          icon="photo-o"
-          text="文字"
-        >
-        </van-grid-item>
-      </van-grid>
-    </van-skeleton>
+        <van-cell title="Time" :value="item.dateYmdh" size="large"></van-cell>
+        <van-row>
+          <van-col span="12">
+            <van-cell :value="item.wtNm"></van-cell>
+          </van-col>
+          <van-col span="12">
+            <van-cell>
+              <template>
+                <span class="sh_day_text_right">{{ item.wtTemp }}℃</span>
+              </template>
+            </van-cell>
+          </van-col>
+        </van-row>
+        <van-cell
+          title="风向"
+          :value="item.wtWindNm"
+          :label="item.wtWinpNm"
+        ></van-cell>
+      </van-cell-group>
+    </van-row>
+    <!-- <van-grid :border="false" :column-num="3">
+      <van-grid-item>
+        <div @touchstart="gotouchstart" @touchend="gotouchend">
+          <van-image src="https://img.yzcdn.cn/vant/apple-1.jpg" />
+        </div>
+    </van-grid> -->
+    <!-- </van-skeleton> -->
+    <!--遮罩-->
+    <van-overlay :show="this.$store.state.sh.loading">
+      <div class="overlay_wrapper">
+        <van-loading size="30" color="#fff" />
+      </div>
+    </van-overlay>
   </section>
 </template>
 <script>
@@ -75,42 +148,31 @@ import {
   Row,
   Cell,
   CellGroup,
+  Collapse,
+  CollapseItem,
+  Divider,
   Button,
   Image,
   Grid,
   GridItem,
   Icon,
+  Loading,
+  Overlay,
   Popup,
+  Tag,
   Toast
 } from "vant";
 import { mapGetters } from "vuex";
 var timeOutEvent = 0;
 export default {
-  computed: {
-    ...mapGetters(["countDouble", "sh_area"]),
-    testvuex() {
-      return this.$store.state.name;
-    }
-  },
-  data() {
-    return {
-      loading: false,
-      show: false,
-      value1: 0,
-      value2: "a",
-      option1: this.$store.state.sh.city_sh,
-      option2: [
-        { text: "默认排序", value: "a" },
-        { text: "好评排序", value: "b" },
-        { text: "销量排序", value: "c" }
-      ]
-    };
-  },
   components: {
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
     [Skeleton.name]: Skeleton,
     [Col.name]: Col,
+    [Collapse.name]: Collapse,
+    [CollapseItem.name]: CollapseItem,
+    [Divider.name]: Divider,
     [Row.name]: Row,
     [Cell.name]: Cell,
     [Grid.name]: Grid,
@@ -119,8 +181,38 @@ export default {
     [Button.name]: Button,
     [Image.name]: Image,
     [Icon.name]: Icon,
+    [Loading.name]: Loading,
+    [Overlay.name]: Overlay,
     [Popup.name]: Popup,
+    [Tag.name]: Tag,
     [Toast.name]: Toast
+  },
+  computed: {
+    ...mapGetters(["sh_today"]),
+    sh_today_day() {
+      return this.$store.state.sh.sh_today_day;
+    },
+    city_list_no: {
+      get: function() {
+        return this.$store.state.sh.city_list_no;
+      },
+      set: function(val) {
+        this.$store.state.sh.city_list_no = val;
+      }
+    }
+  },
+  data() {
+    return {
+      loading: false,
+      show: false,
+      city_nav_no: 0,
+      city_t: null,
+      city_time: "today",
+      city_time_list: [
+        { text: "今日", value: "today" },
+        { text: "逐小时", value: "futureHour" }
+      ]
+    };
   },
   created() {
     this.$store.dispatch("Sh_area_get");
@@ -128,17 +220,6 @@ export default {
   methods: {
     showPopup() {
       this.show = true;
-    },
-    addcount() {
-      this.$store.dispatch("Increment", {
-        n: 10
-      });
-    },
-    loadbtn() {
-      Toast.loading({
-        message: "加载中..."
-        //forbidClick: true
-      });
     },
     gotouchstart(e) {
       e.preventDefault();
@@ -159,13 +240,32 @@ export default {
         //Toast("长按了");
         this.status = true;
       }
+    },
+    city_area_change(area_id) {
+      if (this.city_nav_no == 0) {
+        this.$store.dispatch("Sh_area_change", { weaid: area_id, ag: "today" });
+      } else if (this.city_nav_no == 1) {
+        if (this.city_t) {
+          this.$store.dispatch("Sh_time_change", {
+            weaid: area_id,
+            ag: this.city_t
+          });
+        }
+      }
+    },
+    city_time_change(city_t) {
+      this.$store.state.sh.loading = true;
+      this.city_t = city_t;
+      const weaid = this.$store.state.sh.city_weaid;
+      if (city_t == "today") {
+        this.city_nav_no = 0;
+        this.$store.dispatch("Sh_area_change", { weaid: weaid, ag: "today" });
+      } else if (city_t == "futureHour") {
+        this.city_nav_no = 1;
+        this.$store.dispatch("Sh_time_change", { weaid: weaid, ag: city_t });
+      }
     }
-  },
-  mounted() {
-    console.log("moun");
-    //this.option1 = this.$store.state.sh.city_sh
-  },
-  watch: {}
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -191,17 +291,13 @@ ul {
     }
   }
 }
-/* 可以设置不同的进入和离开动画 */
-/* 设置持续时间和动画函数 */
-.harvey-fade-enter-active {
-  transition: all 0.3s ease;
+.overlay_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
-.harvey-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-.harvey-fade-enter, .harvey-fade-leave-to
-/* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
+.sh_day_text_right {
+  float: right;
 }
 </style>
